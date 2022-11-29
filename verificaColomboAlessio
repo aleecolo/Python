@@ -1,0 +1,169 @@
+'''
+1.creerò un dizionario;
+2.sviluppo metodo ricerca;
+3.sviluppo metodo mostratutto;
+4.sviluppo metodo modifica con riduzione prezzo;
+5.sviluppo metodo ricavato;
+6.sviluppo metodo visualizza;
+7.sviluppo mese incasso minimo
+'''
+#1 
+prenotazioni = {}
+chiave = 0 
+
+def prezzoBase():
+  prezzoB= -1
+  prezzoA = -1
+  while prezzoA < 0 or prezzoB <0:
+    prezzoA = int(input("Inserisci costo bassa stagione: "))
+    prezzoB = int(input("Inserisci costo alta stagione: "))
+    if(prezzoA < 0 or prezzoB <0 ):
+      print("prezzi non validi")
+  prezzo = (f"{prezzoA},{prezzoB}")
+  return prezzo
+
+def leggiDataValida():
+  giorno = -1
+  mese = -1
+  anno = -1
+  while (giorno < 0 or mese < 6 or mese > 9 or anno < 2023):
+    giorno = int(input("inserire giorno: "))
+    mese = int(input("inserire mese: "))
+    anno = int(input("inserire anno: "))
+    if (giorno < 0 or mese < 0 or anno < 2023):
+      print("data non valida")
+  data = (f"data: {giorno}, {mese}, {anno}")
+  return data
+
+def stagionedef():
+  global chiave
+  chiave += 1
+  stagione = prenotazioni[chiave][3][1]
+  if(stagione == 9 or stagione == 8):
+    return 1
+  else:
+    return 2
+
+def scelta():
+  aggiungil = 0
+  aggiungis = 0
+  scelta = 0
+  while (scelta != 1 or scelta != 2):
+    print("1.prezzo base 1 ombrellone 2 sdrai")
+    print("2.aggiungi lettino o sdraio")
+    scelta = int(input("inserire la scelta"))
+    if(scelta != 1 or scelta != 2):
+      print("reinserire")
+  if(scelta == 2):
+    aggiungil = int(input("Aggiungi lettin: "))
+    aggiungis = int(input("aggiungi sdraio: "))
+  opzione = (f"Scelta: {aggiungil}, {aggiungis}")
+  return opzione
+
+def leggiPosizioneValido(): #controllo fila numero
+  fila = -1
+  numero = -1
+  while fila < 0 or numero <0:
+    fila = int(input("Inserisci la fila: "))
+    numero = int(input("Inserisci il numero del lettino: "))
+    if(fila < 0 or numero <0 ):
+      print("fila o numero non validi")
+  posizione = (f"{fila}, {numero}")
+  return posizione
+
+def leggiNumeroValido():
+  n = -1
+  while n<0:
+    n = int(input("Quante prenotazioni vuoi fare? "))
+    if (n<0):
+      print("Inserire un numero positivo")
+  return n
+
+def leggiGiorniValido():
+  n = -1
+  while n<0:
+    n = int(input("Quanti giorni vuoi rimanere? "))
+    if (n<0):
+      print("Inserire un numero positivo")
+  return n
+
+def leggiDati():
+  global chiave
+  chiave += 1
+  posizione = leggiPosizioneValido()
+  prezzo = prezzoBase()
+  data = leggiDataValida()
+  giorni = leggiGiorniValido()
+  scelta = scelta()
+  totale = totale()
+  prenotazioni[chiave] = posizione, prezzo, data, giorni, scelta, totale
+
+def totale():
+  global chiave
+  chiave += 1
+  stagione = stagionedef()
+  prezzobase = prenotazioni[chiave][2][stagione]
+  aggiungil = prenotazioni[chiave][5][1]
+  aggiungis = prenotazioni[chiave][5][2]
+  prezzobase += (prezzobase/2)*aggiungil + (prezzobase/1)*aggiungis
+  return prezzobase
+
+def popola ():
+  leggiDati()
+  print("aggiunto")
+
+#2:
+def ricerca ():
+  chiave = int(input("Inserisci la chiave: "))
+  if chiave in prenotazioni.keys():
+    mostraprenotazione(chiave)  
+  else:
+    print("prenotazione non trovata")
+
+def mostraprenotazione(chiave): #mostra info di un singolo contatto
+  for i in range(len(prenotazioni[chiave])):
+    print(prenotazioni[chiave][i])
+
+#3:
+def tutti():
+    for i in prenotazioni.keys():
+      print(f"{i}:{prenotazioni(i)}")
+
+#4:
+def riduzione():
+  global chiave
+  chiave +=1 
+  mese = 0
+  while (mese < 6 or mese > 9):
+    mese = int(input("Inserisci il mese della prenotazione"))
+    if(mese < 6 or mese > 9):
+      print("reinserisci i dati")
+  for i in prenotazioni.keys():
+    if(prenotazioni[i][2][2] == mese):
+      totale = prenotazioni[chiave][6]
+      
+
+#menù:
+
+menu  = 1
+while (menu!=0):
+  print('0) Esci')
+  print('1) Popola')
+  print('2) Mostra le prenotazioni di un ombrellone')
+  print('3) Mostra i dati di tutte le prenotazioni')
+  print('4) Riduzione prezzo percentuale')
+  print('5) Calcola il totale incassato nel mese X')
+  print('6) Visualizza le prenotazioni di n mesi')
+  scelta=int(input('Scegli : '))
+  if scelta==1:
+    popola()
+  elif scelta==2:
+    ricerca()
+  elif scelta==3:
+    tutti()
+  elif scelta==4:
+    riduzione()
+  elif scelta==5:
+    prezzomese()
+  elif scelta==6:
+    prenotazionimesi()
